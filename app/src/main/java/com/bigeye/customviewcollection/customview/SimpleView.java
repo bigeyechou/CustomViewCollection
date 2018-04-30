@@ -59,6 +59,7 @@ public class SimpleView extends View {
         paint_text.setColor(R.color.colorPrimary);
         paint_text.setTextSize(90);
         paint_text.setTextAlign(Paint.Align.CENTER);//设置文字画笔的基准为center
+
     }
 
     @Override
@@ -125,10 +126,10 @@ public class SimpleView extends View {
      * 画矩形
      */
     private void drawRect(Canvas canvas) {
-        float left = getLeft();
-        float right = getRight();
-        float top = getTop();
-        float bottom = getBottom();
+        float left = 0;
+        float right = getWidth();
+        float top = 0;
+        float bottom = getHeight();
         //给定上下左右位置
         canvas.drawRect(left,top,right,bottom,paint_rect);
     }
