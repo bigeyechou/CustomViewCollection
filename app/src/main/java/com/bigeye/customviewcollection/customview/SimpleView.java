@@ -2,12 +2,16 @@ package com.bigeye.customviewcollection.customview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.bigeye.customviewcollection.R;
 
 /**
  * Created by 眼神 on 2018/4/30.
@@ -22,6 +26,8 @@ public class SimpleView extends View {
     private Paint paint_circle = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint paint_arc1 = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint paint_arc2 = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint paint_bitmap = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private Paint paint_text = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public SimpleView(Context context) {
         super(context);
@@ -41,11 +47,18 @@ public class SimpleView extends View {
     /**
      * 初始化画笔
      */
+    @SuppressLint("ResourceAsColor")
     private void initPaint() {
         paint_rect.setColor(getResources().getColor(android.R.color.holo_blue_light));
         paint_circle.setColor(getResources().getColor(android.R.color.holo_red_light));
         paint_arc1.setColor(getResources().getColor(android.R.color.holo_green_light));
         paint_arc2.setColor(getResources().getColor(android.R.color.holo_green_dark));
+
+        paint_bitmap.setColor(R.color.colorAccent);
+
+        paint_text.setColor(R.color.colorPrimary);
+        paint_text.setTextSize(90);
+        paint_text.setTextAlign(Paint.Align.CENTER);//设置文字画笔的基准为center
     }
 
     @Override
@@ -92,14 +105,24 @@ public class SimpleView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        /**
+         * 画图形
+         */
         drawRect(canvas);
         drawCircle(canvas);
         drawArc(canvas);
+        /**
+         * 画bitmap
+         */
+        drawBitmap(canvas);
+        /**
+         * 画TextView
+         */
+        drawTextView(canvas);
     }
 
     /**
      * 画矩形
-     * @param canvas
      */
     private void drawRect(Canvas canvas) {
         float left = getLeft();
@@ -111,7 +134,6 @@ public class SimpleView extends View {
     }
     /**
      * 画圆形
-     * @param canvas
      */
     private void drawCircle(Canvas canvas) {
         float width = getWidth();//圆心的X坐标
@@ -121,7 +143,6 @@ public class SimpleView extends View {
     }
     /**
      * 画弧形
-     * @param canvas
      */
     @SuppressLint("NewApi")
     private void drawArc(Canvas canvas) {
@@ -135,5 +156,33 @@ public class SimpleView extends View {
         //另一种写法，sdk版本21以上的方法(坐标点左上右下、起始位置、扫过的角度，是否需要焦点，画笔)
         canvas.drawArc(0f,0f,witch,height,120,60,true,paint_arc1);
     }
+
+    /**
+     * 画bitmap
+     */
+    private void drawBitmap(Canvas canvas) {
+        Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_collected_yellow);
+        float width = (getWidth() - mBitmap.getWidth())/2;
+        float height = (getHeight() - mBitmap.getHeight())/2;
+        //left和top确定绘制的位置
+        canvas.drawBitmap(mBitmap, width, height, paint_circle);
+    }
+
+    /**
+     * 画TextView
+     */
+    private void drawTextView(Canvas canvas) {
+        Paint.FontMetrics fontMetrics = paint_text.getFontMetrics();
+        float top = fontMetrics.top;
+        float bottom = fontMetrics.bottom;
+
+        int witch = getWidth();
+        int height = getHeight();
+        RectF rect = new RectF(0f,0f,witch,height);
+        //文字基准线
+        int baseLineY = (int) (rect.centerY() - top/2 - bottom/2);
+        canvas.drawText("Hello   View", rect.centerX(), baseLineY, paint_text);
+    }
+
 
 }
