@@ -7,13 +7,16 @@
   <com.bigeye.customviewcollection.customview.SimpleView
       android:id="@+id/simple_view"
       android:layout_width="200dp"
-      android:layout_height="200dp"/>
+      android:layout_height="200dp"
+      android:visibility="gone"/>
 
   <com.bigeye.customviewcollection.customview.HexagonCapacityView
       android:id="@+id/capacity_view"
       android:layout_width="200dp"
       android:layout_height="200dp"
       android:layout_below="@+id/simple_view"
-      android:layout_marginTop="10dp"/>
+      android:layout_marginTop="10dp"
+      android:visibility="visible"/>
+
 
 </RelativeLayout>
