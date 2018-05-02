@@ -133,7 +133,7 @@ public class HexagonCapacityView extends View{
         borderPath.lineTo(4*b_width,3*b_height);
         borderPath.lineTo(2*b_width,4*b_height);
         borderPath.lineTo(0,3*b_height);
-        borderPath.lineTo(0,b_height);
+        borderPath.close();//闭合，链接起始点
         canvas.drawPath(borderPath,paint_border);
     }
 
@@ -172,7 +172,7 @@ public class HexagonCapacityView extends View{
         linePath.lineTo(four_x[2],four_y[2]);
         linePath.lineTo(five_x,five_y[4]);
         linePath.lineTo(six_x[3],six_y[3]);
-        linePath.lineTo(one_x[4],one_y[4]);
+        linePath.close();
         canvas.drawPath(linePath,paint_line);
     }
 
