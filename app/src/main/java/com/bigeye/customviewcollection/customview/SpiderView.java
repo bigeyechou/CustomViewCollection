@@ -159,6 +159,9 @@ public class SpiderView extends View {
         }
     }
 
+    /**
+     * 绘制能力区域
+     */
     private void drawRegina(Canvas canvas) {
         Path path = new Path();
         valuePaint.setAlpha(255);
