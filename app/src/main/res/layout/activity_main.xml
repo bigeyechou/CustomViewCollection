@@ -29,6 +29,10 @@
 
   <com.bigeye.customviewcollection.customview.SpiderView
       android:layout_width="300dp"
-      android:layout_height="300dp" />
+      android:layout_height="300dp"
+      android:visibility="gone"/>
 
+  <com.bigeye.customviewcollection.customview.RotateView
+      android:layout_width="300dp"
+      android:layout_height="300dp" />
 </RelativeLayout>
