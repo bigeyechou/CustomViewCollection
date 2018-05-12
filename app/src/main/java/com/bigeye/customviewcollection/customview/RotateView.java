@@ -48,6 +48,7 @@ public class RotateView extends View{
     }
 
     private void init() {
+        paint.setStyle(Paint.Style.STROKE);
         pos = new float[2];
         tan = new float[2];
         BitmapFactory.Options options = new BitmapFactory.Options();
