@@ -16,6 +16,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.bigeye.customviewcollection.R;
+
 /**
  * Created by 眼神 on 2018/5/12.
  */
@@ -87,7 +89,7 @@ public class SearchAnimationView extends View {
 
     private void initPaint() {
         mPaint = new Paint();
-        mPaint.setColor(Color.RED);
+        mPaint.setColor(getResources().getColor(R.color.deeppink));
         mPaint.setStrokeWidth(20);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -175,6 +177,8 @@ public class SearchAnimationView extends View {
         super.onDraw(canvas);
         //居中
         canvas.translate(centerX,centerY);
+        canvas.drawColor(getResources().getColor(R.color.gainsboro));
+
         //根据当前的状态绘制
         switch (currentState){
             case NONE://不做操作
@@ -205,6 +209,12 @@ public class SearchAnimationView extends View {
                     currentState = State.SEARCHING;
                     searchAnimator.start();
                 }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                 centerX = event.getX();
+                 centerY = event.getY();
+                 postInvalidate();
+
                 break;
         }
         return true;
