@@ -20,6 +20,7 @@ import com.bigeye.customviewcollection.R;
 
 /**
  * Created by 眼神 on 2018/5/12.
+ * 带动效的搜索按钮
  */
 
 public class SearchAnimationView extends View {

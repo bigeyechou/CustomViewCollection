@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:background="@color/khaki">
 
   <com.bigeye.customviewcollection.customview.SimpleView
       android:id="@+id/simple_view"
@@ -39,7 +40,14 @@
 
   <com.bigeye.customviewcollection.customview.SearchAnimationView
       android:layout_width="300dp"
-      android:layout_height="300dp" />
-
+      android:layout_height="300dp"
+      android:visibility="gone"/>
+<com.bigeye.customviewcollection.customview.ShadeTextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textSize="36dp"
+    android:gravity="center"
+    android:layout_centerInParent="true"
+    android:text="眼锅锅爱琳妹儿"/>
 
 </RelativeLayout>
