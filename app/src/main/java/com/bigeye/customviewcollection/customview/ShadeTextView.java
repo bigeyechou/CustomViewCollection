@@ -15,6 +15,7 @@ import com.bigeye.customviewcollection.R;
 
 /**
  * Created by 眼神 on 2018/5/12.
+ * 渐变的TextView
  *
  */
 
