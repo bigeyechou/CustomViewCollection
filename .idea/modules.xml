@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/CustomViewCollection.iml" filepath="$PROJECT_DIR$/.idea/CustomViewCollection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomViewCollection.iml" filepath="$PROJECT_DIR$/CustomViewCollection.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
 </project>

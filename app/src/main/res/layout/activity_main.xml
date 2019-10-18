@@ -1,53 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:background="@color/khaki">
+    android:gravity="center_horizontal">
 
-  <com.bigeye.customviewcollection.customview.SimpleView
-      android:id="@+id/simple_view"
-      android:layout_width="200dp"
-      android:layout_height="200dp"
-      android:visibility="gone"/>
+    <com.bigeye.customviewcollection.customview.SimpleView
+        android:id="@+id/simple_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:visibility="gone"/>
 
-  <com.bigeye.customviewcollection.customview.HexagonCapacityView
-      android:id="@+id/capacity_view"
-      android:layout_width="200dp"
-      android:layout_height="200dp"
-      android:layout_below="@+id/simple_view"
-      android:layout_marginTop="10dp"
-      android:visibility="gone"/>
-  <com.bigeye.customviewcollection.customview.ScratchCardView
-      android:layout_width="200dp"
-      android:layout_height="200dp"
-      android:visibility="gone"/>
+    <com.bigeye.customviewcollection.customview.HexagonCapacityView
+        android:id="@+id/capacity_view"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/simple_view"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"/>
 
-  <com.bigeye.customviewcollection.customview.SearchView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:visibility="gone"/>
+    <com.bigeye.customviewcollection.customview.ScratchCardView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:visibility="gone"/>
 
-  <com.bigeye.customviewcollection.customview.SpiderView
-      android:layout_width="300dp"
-      android:layout_height="300dp"
-      android:visibility="gone"/>
+    <com.bigeye.customviewcollection.customview.SearchView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
-  <com.bigeye.customviewcollection.customview.RotateView
-      android:layout_width="300dp"
-      android:layout_height="300dp"
-      android:visibility="gone"/>
+    <com.bigeye.customviewcollection.customview.SpiderView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:visibility="gone"/>
 
-  <com.bigeye.customviewcollection.customview.SearchAnimationView
-      android:layout_width="300dp"
-      android:layout_height="300dp"
-      android:visibility="gone"/>
-<com.bigeye.customviewcollection.customview.ShadeTextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="36dp"
-    android:gravity="center"
-    android:layout_centerInParent="true"
-    android:text="眼锅锅爱琳妹儿"/>
+    <com.bigeye.customviewcollection.customview.RotateView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:visibility="gone"/>
 
+    <com.bigeye.customviewcollection.customview.SearchAnimationView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:visibility="gone"/>
+
+    <com.bigeye.customviewcollection.customview.ShadeTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="36dp"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:text="hello word"/>
+
+    <com.bigeye.customviewcollection.customview.PieChartView
+        android:id="@+id/pie_char"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
 </RelativeLayout>

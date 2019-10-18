@@ -68,6 +68,7 @@ public class SimpleView extends View {
         setMeasuredDimension(measureWidth(widthMeasureSpec),measureHeight(heightMeasureSpec));
     }
 
+
     /**
      * 测量宽度
      */
