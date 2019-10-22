@@ -26,19 +26,23 @@ public class MainActivity extends AppCompatActivity {
         pieChartView = findViewById(R.id.pie_char);
         List<PieData> datas = new ArrayList<>();
         PieData data1 = new PieData();
+        data1.setName("红");
         data1.setValue(10);
         data1.setColor(Color.RED);
 
         PieData data2 = new PieData();
+        data2.setName("绿");
         data2.setValue(15);
         data2.setColor(Color.GREEN);
 
         PieData data3 = new PieData();
+        data3.setName("篮");
         data3.setValue(17);
-        data3.setColor(Color.BLACK);
+        data3.setColor(Color.BLUE);
 
         PieData data4 = new PieData();
         data4.setValue(12);
+        data4.setName("黄");
         data4.setColor(Color.YELLOW);
         datas.add(data1);
         datas.add(data2);

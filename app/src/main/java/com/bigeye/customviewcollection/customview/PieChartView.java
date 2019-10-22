@@ -1,11 +1,15 @@
 package com.bigeye.customviewcollection.customview;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PathMeasure;
 import android.graphics.RectF;
-import android.renderscript.Sampler;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,10 +22,26 @@ import java.util.List;
  */
 public class PieChartView extends View {
 
-  private Paint paintChart, paintText, paintMasking;
+  private Paint paintChart, paintText, paintLine, paintMasking;
   private RectF mRectF = new RectF();
   private List<PieData> mPieDatas = new ArrayList<>();
   private float mSumValue;
+  private int radius;
+  private int diameter;
+  private int centerX, centerY;
+  private float space = 3f;
+
+  private ValueAnimator mAnimator;
+
+  // 这个视图拥有的状态
+  public static enum State {
+
+  }
+
+  // 默认的动效周期 2s
+  private int defaultDuration = 1000;
+  //动画的执行的百分比mAnimatorValue
+  private float mAnimatorValue = 1f;
 
   public PieChartView(Context context) {
     super(context);
@@ -40,20 +60,28 @@ public class PieChartView extends View {
 
   private void initAll() {
     initPain();
+    startAnimation();
   }
 
   private void initPain() {
     paintChart = new Paint();
+    paintChart.setAntiAlias(true);
 
     paintMasking = new Paint();
     paintMasking.setColor(Color.WHITE);
     paintMasking.setStyle(Paint.Style.FILL);
+    paintMasking.setAntiAlias(true);
+
+    paintLine = new Paint();
+    paintLine.setStyle(Paint.Style.STROKE);
+    paintLine.setStrokeWidth(5);
+    paintLine.setAntiAlias(true);
 
     paintText = new Paint();
     paintText.setColor(Color.BLACK);
     paintText.setStyle(Paint.Style.FILL);
-    paintText.setStrokeWidth(8);
-    paintText.setTextSize(20);
+    paintText.setStrokeWidth(20);
+    paintText.setTextSize(30);
   }
 
   public void setPieData(List<PieData> pieData) {
@@ -75,23 +103,98 @@ public class PieChartView extends View {
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    mRectF.set(0, 0, getWidth(), getHeight());
+    if (true) {
+      diameter = (getWidth() > getHeight() ? getHeight() : getWidth()) - 100;
+    } else {
+      //设置图形的大小
+    }
+    radius = diameter / 2;
+    centerX = getWidth() / 2;
+    centerY = getHeight() / 2;
+    mRectF.set(centerX - radius, centerY - radius, centerX + radius, centerY + radius);
   }
+
+  private float startAngle = -90;
+  private float sweepAngle;
 
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     if (mPieDatas == null || mPieDatas.size() <= 0) {
       return;
     }
-    float startAngle = 0;
-    float sweepAngle = 0;
+    startAngle = -90;
     for (PieData data : mPieDatas) {
       paintChart.setColor(data.getColor());
+      paintLine.setColor(data.getColor());
       sweepAngle = (data.getValue() / mSumValue) * 360f;
-      canvas.drawArc(mRectF, startAngle, sweepAngle - 3f, true, paintChart);
+      canvas.drawArc(mRectF, startAngle, sweepAngle * mAnimatorValue - space, true, paintChart);
+      if (true) {
+        //是否画标签说明的小部件
+        drawTip(canvas, data);
+      }
       startAngle += sweepAngle;
     }
-    canvas.drawCircle(getWidth() / 2, getHeight() / 2, getWidth() / 4, paintMasking);
+    canvas.drawCircle(centerX, centerY, radius / 2, paintMasking);
+  }
+
+  private void drawTip(Canvas canvas, PieData data) {
+    Path pathLine = new Path();
+    PathMeasure measure = new PathMeasure();
+
+    float textPadding = 10;
+    float textHigh = (paintText.getFontMetrics().bottom - paintText.getFontMetrics().top) / 2;
+    float padding = 20;
+    float dotSize = 10;
+    float dotX = (float) (centerX + (radius + padding) * Math.cos(Math.toRadians((startAngle + sweepAngle / 2))));
+    float dotY = (float) (centerY + (radius + padding) * Math.sin(Math.toRadians((startAngle + sweepAngle / 2))));
+
+    float lineX = (float) (centerX + (radius + padding * 2) * Math.cos(Math.toRadians((startAngle + sweepAngle / 2))));
+    float lineY = (float) (centerY + (radius + padding * 2) * Math.sin(Math.toRadians((startAngle + sweepAngle / 2))));
+    canvas.drawCircle(dotX, dotY, dotSize, paintChart);
+
+    if (dotX > centerX) {
+      //右侧
+      pathLine.moveTo(dotX, dotY);
+      pathLine.lineTo(lineX, lineY);
+      pathLine.lineTo(getRight(), lineY);
+      measure.setPath(pathLine, false);
+      Path dst = new Path();
+      measure.getSegment(0, measure.getLength() * mAnimatorValue, dst, true);
+      canvas.drawPath(dst, paintLine);
+
+      if (mAnimatorValue == 1) {
+        paintText.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText((data.getValue() / mSumValue) * 100 + "%", getRight() - textPadding, lineY - textPadding, paintText);
+        canvas.drawText(data.getName(), getRight() - textPadding, lineY + textHigh + textPadding, paintText);
+      }
+    } else {
+      //左侧
+      measure = new PathMeasure();
+      pathLine.moveTo(dotX, dotY);
+      pathLine.lineTo(lineX, lineY);
+      pathLine.lineTo(0, lineY);
+      measure.setPath(pathLine, false);
+      Path dst = new Path();
+      measure.getSegment(0, measure.getLength() * mAnimatorValue, dst, true);
+      canvas.drawPath(dst, paintLine);
+
+      if (mAnimatorValue == 1) {
+        paintText.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText((data.getValue() / mSumValue) * 100 + "%", 0 + textPadding, lineY - textPadding, paintText);
+        canvas.drawText(data.getName(), 0 + textPadding, lineY + textHigh + textPadding, paintText);
+      }
+    }
+  }
+
+  private void startAnimation() {
+    mAnimator = ValueAnimator.ofFloat(0, 1).setDuration(defaultDuration);
+    mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+      @Override public void onAnimationUpdate(ValueAnimator valueAnimator) {
+        mAnimatorValue = (float) valueAnimator.getAnimatedValue();
+        invalidate();
+      }
+    });
+    mAnimator.start();
   }
 
 }
