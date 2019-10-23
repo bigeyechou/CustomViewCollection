@@ -2,7 +2,10 @@
 <resources>
     <!-- 圆角 -->
     <declare-styleable name="PieChartView">
-        <!--<attr name="size" format="dimension"/>-->
+        <attr name="pie_size" format="dimension"/>
+        <attr name="pie_space" format="float"/>
+        <attr name="open_animation" format="boolean"/>
+        <attr name="show_tip" format="boolean"/>
     </declare-styleable>
     
 </resources>

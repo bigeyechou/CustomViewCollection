@@ -2,17 +2,17 @@ package com.bigeye.customviewcollection.customview;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import com.bigeye.customviewcollection.R;
 import com.bigeye.customviewcollection.data.PieData;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +29,11 @@ public class PieChartView extends View {
   private int radius;
   private int diameter;
   private int centerX, centerY;
-  private float space = 3f;
+  private float space;
 
+  private boolean showTip;
+  private boolean openAnimation;
   private ValueAnimator mAnimator;
-
-  // 这个视图拥有的状态
-  public static enum State {
-
-  }
 
   // 默认的动效周期 2s
   private int defaultDuration = 1000;
@@ -49,18 +46,25 @@ public class PieChartView extends View {
   }
 
   public PieChartView(Context context, @Nullable AttributeSet attrs) {
-    super(context, attrs);
-    initAll();
+    this(context, attrs,0);
   }
 
   public PieChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
+    TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.PieChartView, defStyleAttr, 0);
+    diameter = typedArray.getDimensionPixelSize(R.styleable.PieChartView_pie_size, 0);
+    space = typedArray.getFloat(R.styleable.PieChartView_pie_space, 0f);
+    openAnimation = typedArray.getBoolean(R.styleable.PieChartView_open_animation, false);
+    showTip = typedArray.getBoolean(R.styleable.PieChartView_show_tip, false);
+    typedArray.recycle();
     initAll();
   }
 
   private void initAll() {
     initPain();
-    startAnimation();
+    if (openAnimation){
+      startAnimation();
+    }
   }
 
   private void initPain() {
@@ -103,10 +107,8 @@ public class PieChartView extends View {
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    if (true) {
+    if (diameter<=0) {
       diameter = (getWidth() > getHeight() ? getHeight() : getWidth()) - 100;
-    } else {
-      //设置图形的大小
     }
     radius = diameter / 2;
     centerX = getWidth() / 2;
@@ -128,7 +130,7 @@ public class PieChartView extends View {
       paintLine.setColor(data.getColor());
       sweepAngle = (data.getValue() / mSumValue) * 360f;
       canvas.drawArc(mRectF, startAngle, sweepAngle * mAnimatorValue - space, true, paintChart);
-      if (true) {
+      if (showTip) {
         //是否画标签说明的小部件
         drawTip(canvas, data);
       }
