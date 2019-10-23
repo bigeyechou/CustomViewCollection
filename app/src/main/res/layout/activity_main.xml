@@ -58,9 +58,10 @@
         android:id="@+id/pie_char"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        app:pie_size="150dp"
+        app:pie_size="190dp"
         app:pie_space="2"
         app:show_tip="true"
-        app:open_animation="true"/>
+        app:open_animation="true"
+        android:visibility="visible"/>
 
 </RelativeLayout>

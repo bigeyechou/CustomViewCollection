@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 圆角 -->
+    <!-- 饼状图 -->
     <declare-styleable name="PieChartView">
-        <attr name="pie_size" format="dimension"/>
-        <attr name="pie_space" format="float"/>
-        <attr name="open_animation" format="boolean"/>
-        <attr name="show_tip" format="boolean"/>
+        <attr name="pie_size" format="dimension"/><!-- 饼状图的直径 -->
+        <attr name="pie_space" format="float"/><!-- 饼状图间隔尺寸 -->
+        <attr name="open_animation" format="boolean"/><!-- 是否开启动画 -->
+        <attr name="show_tip" format="boolean"/><!-- 是否显示提示说明的线 -->
     </declare-styleable>
     
 </resources>

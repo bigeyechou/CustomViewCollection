@@ -24,14 +24,21 @@ public class PieChartView extends View {
 
   private Paint paintChart, paintText, paintLine, paintMasking;
   private RectF mRectF = new RectF();
+  //饼状图的数据（如：name、value数值、颜色等）
   private List<PieData> mPieDatas = new ArrayList<>();
+  //总数，方便算百分比
   private float mSumValue;
+  //半径
   private int radius;
+  //直径
   private int diameter;
+  //中心坐标
   private int centerX, centerY;
+  //间隔的距离
   private float space;
 
   private boolean showTip;
+  private int tipSize;
   private boolean openAnimation;
   private ValueAnimator mAnimator;
 
@@ -46,7 +53,7 @@ public class PieChartView extends View {
   }
 
   public PieChartView(Context context, @Nullable AttributeSet attrs) {
-    this(context, attrs,0);
+    this(context, attrs, 0);
   }
 
   public PieChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -56,13 +63,14 @@ public class PieChartView extends View {
     space = typedArray.getFloat(R.styleable.PieChartView_pie_space, 0f);
     openAnimation = typedArray.getBoolean(R.styleable.PieChartView_open_animation, false);
     showTip = typedArray.getBoolean(R.styleable.PieChartView_show_tip, false);
+    tipSize = showTip?100:0;//如果显示tip，则预留出tip控件的间距
     typedArray.recycle();
     initAll();
   }
 
   private void initAll() {
     initPain();
-    if (openAnimation){
+    if (openAnimation) {
       startAnimation();
     }
   }
@@ -70,6 +78,7 @@ public class PieChartView extends View {
   private void initPain() {
     paintChart = new Paint();
     paintChart.setAntiAlias(true);
+    paintChart.setColor(Color.BLACK);
 
     paintMasking = new Paint();
     paintMasking.setColor(Color.WHITE);
@@ -88,6 +97,10 @@ public class PieChartView extends View {
     paintText.setTextSize(30);
   }
 
+  /**
+   * 设置数据源
+   * @param pieData 饼状图的数据
+   */
   public void setPieData(List<PieData> pieData) {
     if (pieData.size() > 0) {
       mPieDatas = pieData;
@@ -107,8 +120,9 @@ public class PieChartView extends View {
 
   @Override protected void onSizeChanged(int w, int h, int oldw, int oldh) {
     super.onSizeChanged(w, h, oldw, oldh);
-    if (diameter<=0) {
-      diameter = (getWidth() > getHeight() ? getHeight() : getWidth()) - 100;
+    //设置尺寸，没有设置pie_size或者设置的size + 预留给tip控件的距离>=最小边时不使用xml里设置的直径尺寸
+    if (diameter <= 0 || diameter+tipSize >= getWidth() || diameter+tipSize >= getHeight()) {
+      diameter = (getWidth() > getHeight() ? getHeight() : getWidth()) - tipSize;
     }
     radius = diameter / 2;
     centerX = getWidth() / 2;
@@ -122,9 +136,10 @@ public class PieChartView extends View {
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     if (mPieDatas == null || mPieDatas.size() <= 0) {
+      canvas.drawArc(mRectF, 0, 360, true, paintChart);
+      canvas.drawCircle(centerX, centerY, radius / 2, paintMasking);
       return;
     }
-    startAngle = -90;
     for (PieData data : mPieDatas) {
       paintChart.setColor(data.getColor());
       paintLine.setColor(data.getColor());
@@ -139,6 +154,9 @@ public class PieChartView extends View {
     canvas.drawCircle(centerX, centerY, radius / 2, paintMasking);
   }
 
+  /**
+   * 画tip控件
+   */
   private void drawTip(Canvas canvas, PieData data) {
     Path pathLine = new Path();
     PathMeasure measure = new PathMeasure();
@@ -166,8 +184,8 @@ public class PieChartView extends View {
 
       if (mAnimatorValue == 1) {
         paintText.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText((data.getValue() / mSumValue) * 100 + "%", getRight() - textPadding, lineY - textPadding, paintText);
-        canvas.drawText(data.getName(), getRight() - textPadding, lineY + textHigh + textPadding, paintText);
+        canvas.drawText((data.getValue() / mSumValue) * 100 + "%", getWidth() - textPadding, lineY - textPadding, paintText);
+        canvas.drawText(data.getName(), getWidth() - textPadding, lineY + textHigh + textPadding, paintText);
       }
     } else {
       //左侧
@@ -188,6 +206,9 @@ public class PieChartView extends View {
     }
   }
 
+  /**
+   * 开启动画
+   */
   private void startAnimation() {
     mAnimator = ValueAnimator.ofFloat(0, 1).setDuration(defaultDuration);
     mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
