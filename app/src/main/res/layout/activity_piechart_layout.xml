@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.bigeye.customviewcollection.customview.PieChartView
+        android:id="@+id/pie_char"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:pie_size="190dp"
+        app:pie_space="3"
+        app:show_tip="true"
+        app:open_animation="true"/>
+
+</LinearLayout>

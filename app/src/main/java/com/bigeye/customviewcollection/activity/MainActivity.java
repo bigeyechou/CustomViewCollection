@@ -1,9 +1,11 @@
 package com.bigeye.customviewcollection.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.view.View;
 import android.view.ViewGroup;
 import com.bigeye.customviewcollection.R;
 import com.bigeye.customviewcollection.customview.PieChartView;
@@ -13,42 +15,31 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private PieChartView pieChartView;
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initView();
-    }
+    findViewById(R.id.btn_scratch_card).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        startActivity(new Intent(MainActivity.this,ScratchCardActivity.class));
+      }
+    });
+    findViewById(R.id.btn_search).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        startActivity(new Intent(MainActivity.this,SearchActivity.class));
+      }
+    });
+    findViewById(R.id.btn_shade_text).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        startActivity(new Intent(MainActivity.this,ShadeTextActivity.class));
+      }
+    });
+    findViewById(R.id.btn_pie_char).setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        startActivity(new Intent(MainActivity.this,PieChartActivity.class));
+      }
+    });
+  }
 
-    private void initView() {
-        pieChartView = findViewById(R.id.pie_char);
-        List<PieData> datas = new ArrayList<>();
-        PieData data1 = new PieData();
-        data1.setName("红");
-        data1.setValue(10);
-        data1.setColor(Color.RED);
-
-        PieData data2 = new PieData();
-        data2.setName("绿");
-        data2.setValue(15);
-        data2.setColor(Color.GREEN);
-
-        PieData data3 = new PieData();
-        data3.setName("篮");
-        data3.setValue(17);
-        data3.setColor(Color.BLUE);
-
-        PieData data4 = new PieData();
-        data4.setValue(12);
-        data4.setName("黄");
-        data4.setColor(Color.YELLOW);
-        datas.add(data1);
-        datas.add(data2);
-        datas.add(data3);
-        datas.add(data4);
-
-        pieChartView.setPieData(datas);
-    }
 }

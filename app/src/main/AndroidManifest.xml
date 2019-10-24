@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activity.ScratchCardActivity"/>
+        <activity android:name=".activity.SearchActivity"/>
+        <activity android:name=".activity.ShadeTextActivity"/>
+        <activity android:name=".activity.PieChartActivity"/>
+
     </application>
 
 </manifest>

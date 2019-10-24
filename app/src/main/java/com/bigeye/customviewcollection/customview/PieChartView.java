@@ -136,7 +136,7 @@ public class PieChartView extends View {
   @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     if (mPieDatas == null || mPieDatas.size() <= 0) {
-      canvas.drawArc(mRectF, 0, 360, true, paintChart);
+      canvas.drawArc(mRectF, 0, 360- space, true, paintChart);
       canvas.drawCircle(centerX, centerY, radius / 2, paintMasking);
       return;
     }
