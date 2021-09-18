@@ -25,7 +25,7 @@ import com.bigeye.customviewcollection.R;
 
 public class SearchAnimationView extends View {
 
-    private float centerX,centerY;
+    private float centerX, centerY;
     private Paint mPaint;
 
     Path path_search;
@@ -34,7 +34,7 @@ public class SearchAnimationView extends View {
     private State currentState = State.SEARCHING;
     // 默认的动效周期 2s
     private int defaultDuration = 2000;
-    private ValueAnimator searchAnimator,endingAnimator;
+    private ValueAnimator searchAnimator, endingAnimator;
     // 动画数值(用于控制动画状态,因为同一时间内只允许有一种状态出现,具体数值处理取决于当前状态)
     private float mAnimatorValue = 0;
     // 动效过程监听器
@@ -48,10 +48,13 @@ public class SearchAnimationView extends View {
     /**
      * 搜索的状态
      */
-    public static enum State{
+    public enum State {
+        //不做操作
         NONE,
+        //搜索中
         SEARCHING,
-        ENDING;
+        //结束搜索
+        ENDING
     }
 
     public SearchAnimationView(Context context) {
@@ -71,15 +74,15 @@ public class SearchAnimationView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        centerX = w/2;
-        centerY = h/2;
+        centerX = w >> 2;
+        centerY = h >> 2;
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
     /**
      * 初始化
      */
-    private void initAll(){
+    private void initAll() {
         initPaint();
         initPath();
         initListener();
@@ -103,13 +106,14 @@ public class SearchAnimationView extends View {
         /**
          * 放大镜圆圈
          */
-        RectF oval_search = new RectF(-50,-50,50,50);
-        path_search.addArc(oval_search,45,359.9f);
+        RectF oval_search = new RectF(-50, -50, 50, 50);
+        path_search.addArc(oval_search, 45, 359.9f);
 
-        path_search.lineTo(80,80);
+        path_search.lineTo(80, 80);
 
     }
-    private void initListener(){
+
+    private void initListener() {
         mUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -141,12 +145,13 @@ public class SearchAnimationView extends View {
             }
         };
     }
-    private void initHandler(){
+
+    private void initHandler() {
         mAnimatorHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                switch (currentState){
+                switch (currentState) {
                     case SEARCHING:
                         isOver = false;
                         currentState = State.ENDING;
@@ -161,9 +166,10 @@ public class SearchAnimationView extends View {
         };
 
     }
+
     private void initAnimation() {
-        searchAnimator = ValueAnimator.ofFloat(0,1).setDuration(defaultDuration);
-        endingAnimator = ValueAnimator.ofFloat(1,0).setDuration(defaultDuration);
+        searchAnimator = ValueAnimator.ofFloat(0, 1).setDuration(defaultDuration);
+        endingAnimator = ValueAnimator.ofFloat(1, 0).setDuration(defaultDuration);
 
         searchAnimator.addUpdateListener(mUpdateListener);
         endingAnimator.addUpdateListener(mUpdateListener);
@@ -177,25 +183,28 @@ public class SearchAnimationView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         //居中
-        canvas.translate(centerX,centerY);
+        canvas.translate(centerX, centerY);
         canvas.drawColor(getResources().getColor(R.color.gainsboro));
 
         //根据当前的状态绘制
-        switch (currentState){
-            case NONE://不做操作
-                canvas.drawPath(path_search,mPaint);
+        switch (currentState) {
+            case NONE:
+                //不做操作
+                canvas.drawPath(path_search, mPaint);
                 break;
-            case SEARCHING://搜索中
-                pathMeasure.setPath(path_search,false);
+            case SEARCHING:
+                //搜索中
+                pathMeasure.setPath(path_search, false);
                 Path dst_search = new Path();
-                pathMeasure.getSegment(pathMeasure.getLength()*mAnimatorValue,pathMeasure.getLength(),dst_search,true);
-                canvas.drawPath(dst_search,mPaint);
+                pathMeasure.getSegment(pathMeasure.getLength() * mAnimatorValue, pathMeasure.getLength(), dst_search, true);
+                canvas.drawPath(dst_search, mPaint);
                 break;
-            case ENDING://结束搜索
-                pathMeasure.setPath(path_search,false);
+            case ENDING:
+                //结束搜索
+                pathMeasure.setPath(path_search, false);
                 Path dst_end = new Path();
-                pathMeasure.getSegment(pathMeasure.getLength()*mAnimatorValue,pathMeasure.getLength(),dst_end,true);
-                canvas.drawPath(dst_end,mPaint);
+                pathMeasure.getSegment(pathMeasure.getLength() * mAnimatorValue, pathMeasure.getLength(), dst_end, true);
+                canvas.drawPath(dst_end, mPaint);
                 break;
         }
 
@@ -203,18 +212,18 @@ public class SearchAnimationView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (isOver){
+                if (isOver) {
                     // 进入开始动画
                     currentState = State.SEARCHING;
                     searchAnimator.start();
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
-                 centerX = event.getX();
-                 centerY = event.getY();
-                 postInvalidate();
+                centerX = event.getX();
+                centerY = event.getY();
+                postInvalidate();
 
                 break;
         }

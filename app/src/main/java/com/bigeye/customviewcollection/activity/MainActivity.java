@@ -1,17 +1,11 @@
 package com.bigeye.customviewcollection.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.view.View;
-import android.view.ViewGroup;
 import com.bigeye.customviewcollection.R;
-import com.bigeye.customviewcollection.customview.PieChartView;
-import com.bigeye.customviewcollection.data.PieData;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

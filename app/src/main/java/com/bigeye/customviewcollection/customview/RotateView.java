@@ -15,17 +15,38 @@ import android.view.View;
 
 import com.bigeye.customviewcollection.R;
 
+import java.util.concurrent.ThreadPoolExecutor;
+
 /**
  * Created by 眼神 on 2018/5/11.
  */
 
-public class RotateView extends View{
+public class RotateView extends View {
     private Paint paint = new Paint();
-    private float currentValue = 0;//当前位置
-    private float[] pos;//记录点的实际位置
-    private float[] tan; //计算旋转的角度
-    private Bitmap mBitmap; //旋转图片
-    private Matrix mMatrix; //矩阵。对图片进行一些操作
+    /**
+     * 当前位置
+     */
+    private float currentValue = 0;
+
+    /**
+     * 记录点的实际位置
+     */
+    private float[] pos;
+
+    /**
+     * 计算旋转的角度
+     */
+    private float[] tan;
+
+    /**
+     * 旋转图片
+     */
+    private Bitmap mBitmap;
+
+    /**
+     * 矩阵。对图片进行一些操作
+     */
+    private Matrix mMatrix;
 
     private int centerY;
     private int centerX;
@@ -52,15 +73,16 @@ public class RotateView extends View{
         pos = new float[2];
         tan = new float[2];
         BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inSampleSize = 2 ;//缩放
-        mBitmap = BitmapFactory.decodeResource(getResources(),R.mipmap.ic_collected_yellow,options);
+        //缩放
+        options.inSampleSize = 2;
+        mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_collected_yellow, options);
         mMatrix = new Matrix();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        centerX = w/2;
-        centerY = h/2;
+        centerX = w / 2;
+        centerY = h / 2;
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
@@ -71,35 +93,33 @@ public class RotateView extends View{
 
     private void drawRotate(Canvas canvas) {
 
-        canvas.translate(centerX,centerY);
+        canvas.translate(centerX, centerY);
         Path path = new Path();
-        path.addCircle(0,0,200,Path.Direction.CW);
+        path.addCircle(0, 0, 200, Path.Direction.CW);
 
-        PathMeasure measure = new PathMeasure(path,false);
+        PathMeasure measure = new PathMeasure(path, false);
 
         //当前位置不断增加，如果超过1则从头开始
         currentValue += 0.005;
-        if (currentValue>=1){
+        if (currentValue >= 1) {
             currentValue = 0;
         }
 
-        /**
-         * 第一种方法
-         */
+         //第一种方法
 //        measure.getPosTan(measure.getLength()*currentValue,pos,tan);
 //        mMatrix.reset();
 //        float degrees = (float) (Math.atan2(tan[1],tan[0])*180/Math.PI);
 //        mMatrix.postRotate(degrees,mBitmap.getWidth()/2,mBitmap.getHeight()/2);
 //        mMatrix.postTranslate(pos[0] - mBitmap.getWidth()/2,pos[1]-mBitmap.getHeight()/2);
-        /**
-         * 第二种方法 简写
-         */
-        measure.getMatrix(measure.getLength() * currentValue, mMatrix, PathMeasure.TANGENT_MATRIX_FLAG | PathMeasure.POSITION_MATRIX_FLAG);
-        mMatrix.preTranslate(-mBitmap.getWidth() / 2, -mBitmap.getHeight() / 2);   // <-- 将图片绘制中心调整到与当前点重合(注意:此处是前乘pre)
 
-        canvas.drawPath(path,paint);
-        canvas.drawBitmap(mBitmap,mMatrix,paint);
-        if (isRun){
+        //第二种方法简写
+        measure.getMatrix(measure.getLength() * currentValue, mMatrix, PathMeasure.TANGENT_MATRIX_FLAG | PathMeasure.POSITION_MATRIX_FLAG);
+        // <-- 将图片绘制中心调整到与当前点重合(注意:此处是前乘pre)
+        mMatrix.preTranslate(-mBitmap.getWidth() >> 2, -mBitmap.getHeight() >> 2);
+
+        canvas.drawPath(path, paint);
+        canvas.drawBitmap(mBitmap, mMatrix, paint);
+        if (isRun) {
             invalidate();
         }
     }
@@ -108,17 +128,16 @@ public class RotateView extends View{
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 isRun = !isRun;
                 break;
-
             case MotionEvent.ACTION_MOVE:
-
                 break;
             case MotionEvent.ACTION_UP:
                 new Thread(runnable).start();
                 break;
+            default:
         }
         return true;
     }
@@ -126,7 +145,7 @@ public class RotateView extends View{
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if (isRun){
+            if (isRun) {
                 postInvalidate();
             }
         }
